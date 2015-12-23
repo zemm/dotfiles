@@ -1,0 +1,19 @@
+#!/bin/bash
+
+main () {
+    local port="$1"; shift
+    local host="localhost"
+
+    case "$port" in
+        ''|*[!0-9]*)
+            echo "Start fake SMTP server that dumps to stdout"
+            echo "usage: `basename "$0"` port"
+            ;;
+        *)
+            echo "Fake SMTP listening on $host:$port"
+            python -m smtpd -n -c DebuggingServer "$host:$port"
+            ;;
+    esac
+}
+
+main $@

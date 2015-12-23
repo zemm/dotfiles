@@ -1,0 +1,4 @@
+# test env
+export COLOR_USER="\e[1;33m"
+export COLOR_HOST="\e[1;33m"
+export COLOR_USERHOSTSPLIT="\e[0;33m"

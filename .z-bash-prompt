@@ -1,0 +1,306 @@
+# Disable terminal flow control
+#stty -ixon
+
+# Colors
+
+          BLACK="\[\e[0;31m\]"
+           BLUE="\[\e[0;34m\]"
+          GREEN="\[\e[0;32m\]"
+           CYAN="\[\e[0;36m\]"
+            RED="\[\e[0;31m\]"
+         PURPLE="\[\e[0;35m\]"
+          BROWN="\[\e[0;33m\]"
+     LIGHT_GRAY="\[\e[0;37m\]"
+      DARK_GRAY="\[\e[1;30m\]"
+     LIGHT_BLUE="\[\e[1;34m\]"
+    LIGHT_GREEN="\[\e[1;32m\]"
+     LIGHT_CYAN="\[\e[1;36m\]"
+      LIGHT_RED="\[\e[1;31m\]"
+   LIGHT_PURPLE="\[\e[1;35m\]"
+         YELLOW="\[\e[1;33m\]"
+          WHITE="\[\e[1;37m\]"
+    COLOR_RESET="\[\e[0m\]"
+
+
+# Presets
+
+      COLOR_USER=${COLOR_USER:-$GREEN}
+      COLOR_HOST=${COLOR_HOST:-$GREEN}
+COLOR_USERHOSTSPLIT=${COLOR_USERHOSTSPLIT:-$GREEN}
+       COLOR_CWD="$BROWN"
+
+  COLOR_MODIFIED="$LIGHT_PURPLE"
+     COLOR_ADDED="$LIGHT_GREEN"
+   COLOR_DELETED="$LIGHT_RED"
+   COLOR_UNCLEAN="$LIGHT_RED"
+ COLOR_UNTRACKED="$BROWN"
+   COLOR_STASHED="$YELLOW"
+    COLOR_REMOTE="$BROWN"
+   COLOR_DIVERGE="$BROWN"
+    COLOR_BRANCH="$CYAN"
+  COLOR_DETACHED="$CYAN"
+       COLOR_REV="$CYAN"
+
+         VCS_PRE="${CYAN}("
+        VCS_POST="${CYAN})"
+
+  VIRTUALENV_PRE=" ${CYAN}("
+VIRTUALENV_COLOR=""
+ VIRTUALENV_POST="${CYAN})"
+
+
+# Git
+# =========================================================
+
+function is_git_repository {
+	if ! which git &>/dev/null; then
+		return 1
+	fi
+	git branch > /dev/null 2>&1
+}
+
+function generate_git_bar {
+	local state=""
+	local git_status="$(git status 2> /dev/null)"
+
+	local branch_pattern="^#? ?On branch ([^${IFS}]*)"
+	local detached_at_pattern='#? ?HEAD detached at ([^${IFS}]*)'
+	local detached_branch_pattern="#? ?Not currently on any branch"
+	local remote_pattern="#? ?Your branch is (.*) of"
+	local diverge_pattern="#? ?Your branch and (.*) have diverged"
+
+	#if [[
+	#	${git_status}} =~ "Changed but not updated" || \
+	#	${git_status}} =~ "Changes not staged for commit" || \
+	#	${git_status}} =~ "Changes to be committed"
+	#]]; then
+	#	state="${state}${COLOR_MODIFIED}*"
+	#fi
+
+	if [[
+		${git_status} =~ "#	modified: " || \
+		${git_status} =~ "#	renamed: "
+	]]; then
+		state="${state}${COLOR_MODIFIED}*"
+	fi
+	if [[ ${git_status} =~ "#	new file: " ]]; then
+		state="${state}${COLOR_ADDED}+"
+	fi
+
+	if [[ ${git_status} =~ "#	deleted: " ]]; then
+		state="${state}${COLOR_DELETED}-"
+	fi
+
+	if [[ ${git_status}} =~ "Untracked files" ]]; then
+		state="${state}${COLOR_UNTRACKED}?"
+	fi
+
+	if [ "$(git stash list 2>/dev/null)" ]; then
+		state="${state}${COLOR_STASHED}˷"
+	fi
+
+	if [[ ${git_status} =~ "You have unmerged paths" ]]; then
+		state="${state}${COLOR_UNCLEAN}!"
+	fi
+
+	local remote
+	if [[ ${git_status} =~ ${remote_pattern} ]]; then
+		if [[ ${BASH_REMATCH[1]} == "ahead" ]]; then
+			remote="${COLOR_REMOTE}↑"
+		else
+			remote="${COLOR_REMOTE}↓"
+		fi
+	fi
+
+	if [[ ${git_status} =~ ${diverge_pattern} ]]; then
+		remote="${COLOR_DIVERGE}↕"
+	fi
+
+	local branch
+	if [[ ${git_status} =~ ${branch_pattern} ]]; then
+		branch=${COLOR_BRANCH}${BASH_REMATCH[1]}
+	elif [[ ${git_status} =~ ${detached_at_pattern} ]]; then
+		#branch="${LIGHT_GRAY}detached at ${COLOR_DETACHED}${BASH_REMATCH[1]}"
+		branch="${LIGHT_GRAY}detached at ${COLOR_DETACHED}$(git describe --contains --all HEAD)"
+	elif [[ ${git_status} =~ ${detached_branch_pattern} ]]; then
+		branch="${LIGHT_GRAY}detached"
+	fi
+
+	echo "${CYAN}(${branch}${s}${remote}${state}${CYAN})"
+}
+
+
+# Mercurial
+# =========================================================
+
+function is_mercurial_repository {
+	#branch=$(hg branch 2>/dev/null)
+	#if [ -n "${branch}" ]; then
+	#	return 0
+	#else
+	#	return 1
+	#fi
+
+	# stupid slow mercurial... let's optimize!
+	return $(upsearch_dir .hg > /dev/null)
+}
+
+function generate_mercurial_bar {
+	local hg_status=$(hg status 2>/dev/null)
+	local hg_summary=$(hg summary 2>/dev/null)
+
+	local modified_pattern="^M "
+	local untracked_pattern="^\? "
+	local added_pattern="^A "
+	local deleted_pattern="^R "
+	local unclean_pattern="^\! "
+
+	local state=""
+	if echo "$hg_status" | egrep -q "${modified_pattern}"; then
+		state="${state}${COLOR_MODIFIED}*"
+	fi
+	if echo "$hg_status" | egrep -q "${added_pattern}"; then
+		state="${state}${COLOR_ADDED}+"
+	fi
+	if echo "$hg_status" | egrep -q "${deleted_pattern}"; then
+		state="${state}${COLOR_DELETED}-"
+	fi
+	if echo "$hg_status" | egrep -q "${untracked_pattern}"; then
+		state="${state}${COLOR_UNTRACKED}?"
+	fi
+	if echo "$hg_status" | egrep -q "${unclean_pattern}"; then
+		state="${state}${COLOR_UNCLEAN}!"
+	fi
+
+	#hg_branch=$(hg branch 2>/dev/null)
+	#branch="${COLOR_BRANCH}${hg_branch}:"
+
+	local branch
+	if [[ ${hg_summary} =~ branch:[[:space:]]([^[[:space:]]+) ]]; then
+		branch="${COLOR_BRANCH}${BASH_REMATCH[1]}:"
+	else
+		branch="${BROWN}NO BRANCH"
+	fi
+
+	# @TODO: multiple bookmarks?
+	local bookmarks
+	if [[ ${hg_summary} =~ bookmarks:[[:space:]]([^[[:space:]]+) ]]; then
+		bookmarks="${COLOR_BRANCH}${BASH_REMATCH[1]}:"
+	else
+		bookmarks=""
+	fi
+
+	local hg_rev
+	hg_rev=$(echo "${hg_summary}" | grep parent | awk -F: '{gsub(/ /, ""); print $2}')
+	#hg_rev=$(hg log -l 1 --template="{rev}")
+	local rev
+	rev="${COLOR_REV}r${hg_rev}"
+
+	echo "${VCS_PRE}${branch}${bookmarks}${rev}${state}${VCS_POST}"
+}
+
+
+# Other
+# =========================================================
+
+function generate_system_bar() {
+	if [[ $(jobs) =~ "Stopped" ]]; then
+		echo "${RED}§"
+	fi
+	if [[ $(jobs) =~ "Running" ]]; then
+		echo "${GREEN}§"
+	fi
+}
+
+function generate_virtualenv_bar() {
+	if test -n "$VIRTUAL_ENV"; then
+		virtualenv_name=$(basename "$VIRTUAL_ENV")
+		echo "${VIRTUALENV_PRE}${COLOR_VIRTUALENV}${virtualenv_name}${VIRTUALENV_POST}"
+	fi
+}
+
+# @TODO: allow custom virtual envs under auto-venv
+function auto_virtualenv() {
+	local auto_venv="$(upsearch_dir .venv)"
+	# auto-activate
+	if test -n "$auto_venv"; then
+		# if we have auto-venv
+		if [ "$auto_venv" != "$VIRTUAL_ENV" ]; then
+			# if auto-venv is not already loaded
+			if test -n "$VIRTUAL_ENV"; then
+				# if we have another virtualenv, deactivate it
+				log_action "deactivate" "$VIRTUAL_ENV"
+				deactivate
+			fi
+			log_action "activate" "$auto_venv"
+			source "$auto_venv/bin/activate"
+		fi
+	else
+		# auto-deactivate
+		if [[ "$VIRTUAL_ENV" == */.venv ]]; then
+			log_action "deactivate" "$VIRTUAL_ENV"
+			deactivate
+		fi
+	fi
+}
+
+function upsearch_dir() {
+	test '/' == "$PWD" && return 1 \
+		|| test -d "$1" && cd "$1" && pwd && return 0 \
+		|| cd .. && upsearch_dir "$1"
+}
+
+function log_action() {
+	local action=$1; shift
+	local params="$@"
+	local line=" ${LIGHT_CYAN}-> ${LIGHT_GREEN}${action} ${LIGHT_PURPLE}${params}${COLOR_RESET}"
+	if [[ ! -z $ACTION_LOG ]]; then
+		ACTION_LOG="${ACTION_LOG}\n$line"
+	else
+		ACTION_LOG="$line"
+	fi
+}
+
+# Prompt
+# =========================================================
+
+function prompt_func() {
+	ACTION_LOG=""
+
+	# <user>@<host> <current working directory>
+	titlebar="${COLOR_USER}\u${COLOR_USERHOSTSPLIT}@${COLOR_HOST}\h ${COLOR_CWD}\w"
+
+	# preprocess
+	auto_virtualenv
+
+	# actionlog
+	if test -n "$ACTION_LOG"; then
+		actionlog="${ACTION_LOG}\n"
+	else
+		actionlog=""
+	fi
+
+	# prompt
+	if [ $(id -u) -eq 0 ]; then
+		# Use red # as prompt char when root
+		prompt="${RED}#${COLOR_RESET} "
+	else
+		prompt="${COLOR_RESET}$ "
+	fi
+
+	# system
+	sysbar="$(generate_system_bar)"
+
+	# vcs
+	if is_git_repository; then
+		vcsbar="$(generate_git_bar)"
+	elif is_mercurial_repository; then
+		vcsbar="$(generate_mercurial_bar)"
+	else
+		vcsbar=""
+	fi
+
+	PS1="${actionlog}${titlebar}$(generate_virtualenv_bar)\n${sysbar}${vcsbar}${prompt}"
+}
+
+PROMPT_COMMAND=prompt_func

@@ -1,0 +1,17 @@
+# default env
+export COLOR_USER="\e[1;32m"
+export COLOR_HOST="\e[1;32m"
+export COLOR_USERHOSTSPLIT="\e[0;32m"
+
+# virtualenvwrapper
+export WORKON_HOME=$HOME/.virtualenvs
+#export PROJECT_HOME=$HOME/python
+if test -f /usr/bin/virtualenvwrapper.sh; then
+	source /usr/bin/virtualenvwrapper.sh
+fi
+
+# GO
+export GOROOT=$HOME/.local/go
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin
+export PATH=$PATH:$GOPATH/bin

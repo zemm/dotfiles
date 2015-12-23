@@ -1,0 +1,22 @@
+# disable nbsp
+if which setxkbmap &> /dev/null; then
+	setxkbmap -option "nbsp:none"
+fi
+
+export LC_NUMERIC=fi_FI.UTF-8
+export LC_TIME=fi_FI.UTF-8
+export LC_COLLATE=fi_FI.UTF-8
+
+# Other
+export EDITOR=nano
+export HISTCONTROL=ignoreboth
+
+if [ -f /usr/bin/src-hilite-lesspipe.sh ]; then
+	export LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
+fi
+
+[ -f ~/.z-bash-env ] && . ~/.z-bash-env
+[ -d ~/.local/bash_completion.d ] && . ~/.local/bash_completion.d/*
+[ -f ~/.z-bash-functions ] && . ~/.z-bash-functions
+[ -f ~/.z-bash-aliases ] && . ~/.z-bash-aliases
+[ -f ~/.z-bash-prompt ] && . ~/.z-bash-prompt

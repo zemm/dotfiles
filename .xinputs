@@ -1,0 +1,21 @@
+TB='Kensington      Kensington Expert Mouse'
+if xinput list | grep -q "$TB"; then
+	echo setup $TB...
+	xinput set-prop "$TB" 'Evdev Wheel Emulation' 1
+	xinput set-prop "$TB" 'Evdev Wheel Emulation Button' 8
+fi
+
+if type "xmodmap" > /dev/null; then
+	echo setup xmodmap options...
+	# Remove Caps Lock
+	#xmodmap -e "remove Lock = Caps_Lock"
+	# Bind backspace to Caps Lock key
+	xmodmap -e "keycode 66 = BackSpace"
+	xmodmap -e "clear Lock"
+fi
+
+if type "setxkbmap" > /dev/null; then
+	echo setup setxkbmap options...
+	setxkbmap -option "nbsp:none"
+	setxkbmap -option "caps:backspace"
+fi

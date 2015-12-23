@@ -1,0 +1,8 @@
+alias s="screen -Urd"
+alias sl="sl -e"
+alias less="less -R"
+alias prettyjson="python -mjson.tool"
+alias curlj="curl -H 'Content-Type: application/json'"
+alias git_tagdates='git log --tags --simplify-by-decoration --pretty="format:%ai %d"'
+alias sc=systemctl
+alias jc=journalctl

@@ -1,0 +1,4 @@
+# production env
+export COLOR_USER="\e[1;31m"
+export COLOR_HOST="\e[1;31m"
+export COLOR_USERHOSTSPLIT="\e[0;31m"
