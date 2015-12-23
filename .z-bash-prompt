@@ -219,8 +219,25 @@ function generate_virtualenv_bar() {
 	fi
 }
 
-# @TODO: allow custom virtual envs under auto-venv
 function auto_virtualenv() {
+	# work only at whitelisted locations
+	[[ -n "$AUTO_VENV_PATHS" ]] || return
+	local cwd=$(pwd)
+	IFS=';' read -ra allowed_paths <<< "$AUTO_VENV_PATHS"
+	for allowed_path in "${allowed_paths[@]}"; do
+		eval allowed_path=$allowed_path
+		if [[ "${cwd}/" == $allowed_path/* ]]; then
+			local use_venv=1
+			break
+		fi
+	done
+
+	if [[ -z $use_venv ]]; then
+		# location is not whitelisted
+		deactivate_venv
+		return
+	fi
+
 	local auto_venv="$(upsearch_dir .venv)"
 	# auto-activate
 	if test -n "$auto_venv"; then
@@ -236,11 +253,15 @@ function auto_virtualenv() {
 			source "$auto_venv/bin/activate"
 		fi
 	else
-		# auto-deactivate
-		if [[ "$VIRTUAL_ENV" == */.venv ]]; then
-			log_action "deactivate" "$VIRTUAL_ENV"
-			deactivate
-		fi
+		deactivate_venv
+	fi
+}
+
+function deactivate_venv() {
+	# auto-deactivate
+	if [[ "$VIRTUAL_ENV" == */.venv ]]; then
+		log_action "deactivate" "$VIRTUAL_ENV"
+		deactivate
 	fi
 }
 
