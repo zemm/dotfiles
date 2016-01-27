@@ -7,7 +7,7 @@
 [github]
 	username = zemm
 [credential]
-	helper = cache
+	helper = cache --timeout=7200
 [credential "https://github.com"]
 	username = zemm
 [merge]
