@@ -3,46 +3,42 @@
 
 # Colors
 
-          BLACK="\[\e[0;30m\]"
-           BLUE="\[\e[0;34m\]"
-          GREEN="\[\e[0;32m\]"
-           CYAN="\[\e[0;36m\]"
-            RED="\[\e[0;31m\]"
-         PURPLE="\[\e[0;35m\]"
-          BROWN="\[\e[0;33m\]"
-     LIGHT_GRAY="\[\e[0;37m\]"
-      DARK_GRAY="\[\e[1;30m\]"
-     LIGHT_BLUE="\[\e[1;34m\]"
-    LIGHT_GREEN="\[\e[1;32m\]"
-     LIGHT_CYAN="\[\e[1;36m\]"
-      LIGHT_RED="\[\e[1;31m\]"
-   LIGHT_PURPLE="\[\e[1;35m\]"
-         YELLOW="\[\e[1;33m\]"
-          WHITE="\[\e[1;37m\]"
-    COLOR_RESET="\[\e[0m\]"
+          BLACK='\e[0;30m'
+           BLUE='\e[0;34m'
+          GREEN='\e[0;32m'
+           CYAN='\e[0;36m'
+            RED='\e[0;31m'
+         PURPLE='\e[0;35m'
+          BROWN='\e[0;33m'
+     LIGHT_GRAY='\e[0;37m'
+      DARK_GRAY='\e[1;30m'
+     LIGHT_BLUE='\e[1;34m'
+    LIGHT_GREEN='\e[1;32m'
+     LIGHT_CYAN='\e[1;36m'
+      LIGHT_RED='\e[1;31m'
+   LIGHT_PURPLE='\e[1;35m'
+         YELLOW='\e[1;33m'
+          WHITE='\e[1;37m'
+    COLOR_RESET='\e[0m'
 
 
 # Presets
 
-      COLOR_USER=${COLOR_USER:-$GREEN}
-      COLOR_HOST=${COLOR_HOST:-$GREEN}
-COLOR_USERHOSTSPLIT=${COLOR_USERHOSTSPLIT:-$GREEN}
-       COLOR_CWD="$BROWN"
+          COLOR_USER=${COLOR_USER:-$GREEN}
+          COLOR_HOST=${COLOR_HOST:-$GREEN}
+ COLOR_USERHOSTSPLIT=${COLOR_USERHOSTSPLIT:-$GREEN}
+           COLOR_CWD=${COLOR_CWD:-$BROWN}
 
   COLOR_MODIFIED="$LIGHT_PURPLE"
      COLOR_ADDED="$LIGHT_GREEN"
    COLOR_DELETED="$LIGHT_RED"
    COLOR_UNCLEAN="$LIGHT_RED"
- COLOR_UNTRACKED="$BROWN"
+ COLOR_UNTRACKED="$BLUE"
    COLOR_STASHED="$YELLOW"
     COLOR_REMOTE="$BROWN"
    COLOR_DIVERGE="$BROWN"
     COLOR_BRANCH="$CYAN"
   COLOR_DETACHED="$CYAN"
-       COLOR_REV="$CYAN"
-
-         VCS_PRE="${CYAN}("
-        VCS_POST="${CYAN})"
 
 
 # Git
@@ -56,73 +52,52 @@ function is_git_repository {
 }
 
 function generate_git_bar {
-	local state=""
-	local git_status="$(git status 2> /dev/null)"
+	local raw_status="$(git status 2> /dev/null)"
 
 	local branch_pattern="^#? ?On branch ([^${IFS}]*)"
-	local detached_at_pattern='#? ?HEAD detached at ([^${IFS}]*)'
+	local detached_at_pattern="#? ?HEAD detached at ([^${IFS}]*)"
 	local detached_branch_pattern="#? ?Not currently on any branch"
 	local remote_pattern="#? ?Your branch is (.*) of"
 	local diverge_pattern="#? ?Your branch and (.*) have diverged"
 
-	#if [[
-	#	${git_status}} =~ "Changed but not updated" || \
-	#	${git_status}} =~ "Changes not staged for commit" || \
-	#	${git_status}} =~ "Changes to be committed"
-	#]]; then
-	#	state="${state}${COLOR_MODIFIED}*"
-	#fi
-
-	if [[
-		${git_status} =~ "#	modified: " || \
-		${git_status} =~ "#	renamed: "
-	]]; then
-		state="${state}${COLOR_MODIFIED}*"
-	fi
-	if [[ ${git_status} =~ "#	new file: " ]]; then
-		state="${state}${COLOR_ADDED}+"
-	fi
-
-	if [[ ${git_status} =~ "#	deleted: " ]]; then
-		state="${state}${COLOR_DELETED}-"
-	fi
-
-	if [[ ${git_status}} =~ "Untracked files" ]]; then
-		state="${state}${COLOR_UNTRACKED}?"
-	fi
-
-	if [ "$(git stash list 2>/dev/null)" ]; then
-		state="${state}${COLOR_STASHED}˷"
-	fi
-
-	if [[ ${git_status} =~ "You have unmerged paths" ]]; then
-		state="${state}${COLOR_UNCLEAN}!"
-	fi
-
-	local remote
-	if [[ ${git_status} =~ ${remote_pattern} ]]; then
-		if [[ ${BASH_REMATCH[1]} == "ahead" ]]; then
-			remote="${COLOR_REMOTE}↑"
-		else
-			remote="${COLOR_REMOTE}↓"
-		fi
-	fi
-
-	if [[ ${git_status} =~ ${diverge_pattern} ]]; then
-		remote="${COLOR_DIVERGE}↕"
-	fi
-
-	local branch
-	if [[ ${git_status} =~ ${branch_pattern} ]]; then
+	local branch=""
+	if [[ ${raw_status} =~ ${branch_pattern} ]]; then
 		branch=${COLOR_BRANCH}${BASH_REMATCH[1]}
-	elif [[ ${git_status} =~ ${detached_at_pattern} ]]; then
-		#branch="${LIGHT_GRAY}detached at ${COLOR_DETACHED}${BASH_REMATCH[1]}"
-		branch="${LIGHT_GRAY}detached at ${COLOR_DETACHED}$(git describe --contains --all HEAD)"
-	elif [[ ${git_status} =~ ${detached_branch_pattern} ]]; then
+	elif [[ ${raw_status} =~ ${detached_at_pattern} ]]; then
+		local hash="${BASH_REMATCH[1]}"
+		local name="$(git describe --contains --all HEAD)"
+		branch="${LIGHT_GRAY}detached ${CYAN}${hash}${LIGHT_GRAY}:${CYAN}${name}"
+	elif [[ ${raw_status} =~ ${detached_branch_pattern} ]]; then
 		branch="${LIGHT_GRAY}detached"
 	fi
 
-	echo "${CYAN}(${branch}${s}${remote}${state}${CYAN})"
+	local flags=""
+	if [[ ${raw_status} =~ ${remote_pattern} ]]; then
+		if [[ ${BASH_REMATCH[1]} == "ahead" ]]; then
+			flags="${COLOR_REMOTE}↑"
+		else
+			flags="${COLOR_REMOTE}↓"
+		fi
+	elif [[ ${raw_status} =~ ${diverge_pattern} ]]; then
+		flags="${COLOR_DIVERGE}↕"
+	fi
+
+	[ "$(git stash list 2>/dev/null)" ] \
+		&& flags="${flags}${COLOR_STASHED}˷"
+	[[ ${raw_status} =~ "You have unmerged paths" ]] \
+		&& flags="${flags}${COLOR_UNCLEAN}!"
+	[[	${raw_status} =~ "#	modified: " || ${raw_status} =~ "#	renamed: " ]] \
+		&& flags="${flags}${COLOR_MODIFIED}*"
+	[[ ${raw_status} =~ "#	new file: " ]] \
+		&& flags="${flags}${COLOR_ADDED}+"
+	[[ ${raw_status} =~ "#	deleted: " ]] \
+		&& flags="${flags}${COLOR_DELETED}-"
+	[[ ${raw_status}} =~ "Untracked files" ]] \
+		&& flags="${flags}${COLOR_UNTRACKED}?"
+
+	[[ -n $flags ]] && flags=" ${flags}"
+
+	echo "${CYAN}${branch}${flags}"
 }
 
 
@@ -130,14 +105,7 @@ function generate_git_bar {
 # =========================================================
 
 function is_mercurial_repository {
-	#branch=$(hg branch 2>/dev/null)
-	#if [ -n "${branch}" ]; then
-	#	return 0
-	#else
-	#	return 1
-	#fi
-
-	# stupid slow mercurial... let's optimize!
+	# faster hg detection because of of stupid slow mercurial
 	return $(upsearch_dir .hg > /dev/null)
 }
 
@@ -168,9 +136,6 @@ function generate_mercurial_bar {
 		state="${state}${COLOR_UNCLEAN}!"
 	fi
 
-	#hg_branch=$(hg branch 2>/dev/null)
-	#branch="${COLOR_BRANCH}${hg_branch}:"
-
 	local branch
 	if [[ ${hg_summary} =~ branch:[[:space:]]([^[[:space:]]+) ]]; then
 		branch="${COLOR_BRANCH}${BASH_REMATCH[1]}:"
@@ -190,9 +155,9 @@ function generate_mercurial_bar {
 	hg_rev=$(echo "${hg_summary}" | grep parent | awk -F: '{gsub(/ /, ""); print $2}')
 	#hg_rev=$(hg log -l 1 --template="{rev}")
 	local rev
-	rev="${COLOR_REV}r${hg_rev}"
+	rev="${CYAN}r${hg_rev}"
 
-	echo "${VCS_PRE}${branch}${bookmarks}${rev}${state}${VCS_POST}"
+	echo "${branch}${bookmarks}${rev}${state}"
 }
 
 
@@ -200,30 +165,24 @@ function generate_mercurial_bar {
 # =========================================================
 
 function generate_system_bar() {
-	if [[ $(jobs) =~ "Stopped" ]]; then
-		echo "${RED}§"
-	fi
-	if [[ $(jobs) =~ "Running" ]]; then
-		echo "${GREEN}§"
-	fi
+	[[ $(jobs) =~ "Stopped" ]] \
+		&& echo -n "${RED}§"
+	[[ $(jobs) =~ "Running" ]] \
+		&& echo -n "${GREEN}§"
 }
 
-function generate_nvm_info {
+function generate_nvm_bar {
 	local version_pattern="node\/v([\.0-9]+)\/bin"
-	local version=""
-	if [ "$NVM_BIN" != "" ]; then
-		local version=""
-		if [[ $NVM_BIN =~ ${version_pattern} ]]; then
-			version="${BASH_REMATCH[1]}"
-		fi
-		echo " ${BLUE}nvm@${version}"
+	if [ "$NVM_BIN" != "" ] && [[ $NVM_BIN =~ ${version_pattern} ]]; then
+		local version="${BASH_REMATCH[1]}"
+		echo " ${BLACK}nvm@${version}"
 	fi
 }
 
-function generate_virtualenv_bar() {
-	if test -n "$VIRTUAL_ENV"; then
+function generate_venv_bar() {
+	if [[ -n $VIRTUAL_ENV ]]; then
 		virtualenv_name=$(basename "$VIRTUAL_ENV")
-		echo " ${BLUE}venv@${virtualenv_name}"
+		echo " ${BLACK}venv@${virtualenv_name}"
 	fi
 }
 
@@ -282,7 +241,7 @@ function upsearch_dir() {
 function log_action() {
 	local action=$1; shift
 	local params="$@"
-	local line=" ${LIGHT_CYAN}-> ${LIGHT_GREEN}${action} ${LIGHT_PURPLE}${params}${COLOR_RESET}"
+	local line=" ${LIGHT_CYAN}-> ${LIGHT_GREEN}${action} ${COLOR_RESET}${params}${COLOR_RESET}"
 	if [[ ! -z $ACTION_LOG ]]; then
 		ACTION_LOG="${ACTION_LOG}\n$line"
 	else
@@ -296,8 +255,10 @@ function log_action() {
 function prompt_func() {
 	ACTION_LOG=""
 
-	# <user>@<host> <current working directory>
-	titlebar="${COLOR_USER}\u${COLOR_USERHOSTSPLIT}@${COLOR_HOST}\h ${COLOR_CWD}\w"
+	# <user>@<host>
+	userbar="${COLOR_USER}\u${COLOR_USERHOSTSPLIT}@${COLOR_HOST}\h"
+	# <current working directory>
+	cwdbar="${COLOR_CWD}\w"
 
 	# preprocess
 	auto_virtualenv
@@ -317,19 +278,20 @@ function prompt_func() {
 		prompt="${COLOR_RESET}$ "
 	fi
 
+	# vcs
+	local vcsbar=""
+	if is_git_repository; then
+		vcsbar="$(generate_git_bar) "
+	elif is_mercurial_repository; then
+		vcsbar="$(generate_mercurial_bar) "
+	fi
+
 	# system
 	sysbar="$(generate_system_bar)"
 
-	# vcs
-	if is_git_repository; then
-		vcsbar="$(generate_git_bar)"
-	elif is_mercurial_repository; then
-		vcsbar="$(generate_mercurial_bar)"
-	else
-		vcsbar=""
-	fi
-
-	PS1="${actionlog}${titlebar}$(generate_virtualenv_bar)$(generate_nvm_info)\n${sysbar}${vcsbar}${prompt}"
+	local line1="${BLACK}╭ ${userbar} ${cwdbar}$(generate_venv_bar)$(generate_nvm_bar)"
+	local line2="${BLACK}╰ ${vcsbar}${sysbar}${prompt}"
+	PS1="${actionlog}${line1}\n${line2}"
 }
 
 PROMPT_COMMAND=prompt_func
