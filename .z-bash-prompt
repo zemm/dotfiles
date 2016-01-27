@@ -256,26 +256,25 @@ function prompt_func() {
 	ACTION_LOG=""
 
 	# <user>@<host>
-	userbar="${COLOR_USER}\u${COLOR_USERHOSTSPLIT}@${COLOR_HOST}\h"
+	local userbar="${COLOR_USER}\u${COLOR_USERHOSTSPLIT}@${COLOR_HOST}\h"
 	# <current working directory>
-	cwdbar="${COLOR_CWD}\w"
+	local cwdbar="${COLOR_CWD}\w"
 
 	# preprocess
 	auto_virtualenv
 
 	# actionlog
+	local actionlog=""
 	if test -n "$ACTION_LOG"; then
 		actionlog="${ACTION_LOG}\n"
-	else
-		actionlog=""
 	fi
 
 	# prompt
 	if [ $(id -u) -eq 0 ]; then
 		# Use red # as prompt char when root
-		prompt="${RED}#${COLOR_RESET} "
+		local prompt="${RED}#${COLOR_RESET} "
 	else
-		prompt="${COLOR_RESET}$ "
+		local prompt="${COLOR_RESET}$ "
 	fi
 
 	# vcs
@@ -287,7 +286,7 @@ function prompt_func() {
 	fi
 
 	# system
-	sysbar="$(generate_system_bar)"
+	local sysbar="$(generate_system_bar)"
 
 	local line1="${BLACK}╭ ${userbar} ${cwdbar}$(generate_venv_bar)$(generate_nvm_bar)"
 	local line2="${BLACK}╰ ${vcsbar}${sysbar}${prompt}"
