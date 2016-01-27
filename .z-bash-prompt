@@ -208,6 +208,18 @@ function generate_system_bar() {
 	fi
 }
 
+function generate_nvm_info {
+	local version_pattern="node\/v([\.0-9]+)\/bin"
+	local version=""
+	if [ "$NVM_BIN" != "" ]; then
+		local version=""
+		if [[ $NVM_BIN =~ ${version_pattern} ]]; then
+			version="${BASH_REMATCH[1]}"
+		fi
+		echo " ${BLUE}nvm@${version}"
+	fi
+}
+
 function generate_virtualenv_bar() {
 	if test -n "$VIRTUAL_ENV"; then
 		virtualenv_name=$(basename "$VIRTUAL_ENV")
@@ -317,7 +329,7 @@ function prompt_func() {
 		vcsbar=""
 	fi
 
-	PS1="${actionlog}${titlebar}$(generate_virtualenv_bar)\n${sysbar}${vcsbar}${prompt}"
+	PS1="${actionlog}${titlebar}$(generate_virtualenv_bar)$(generate_nvm_info)\n${sysbar}${vcsbar}${prompt}"
 }
 
 PROMPT_COMMAND=prompt_func
