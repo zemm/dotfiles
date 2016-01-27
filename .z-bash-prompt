@@ -3,7 +3,7 @@
 
 # Colors
 
-          BLACK="\[\e[0;31m\]"
+          BLACK="\[\e[0;30m\]"
            BLUE="\[\e[0;34m\]"
           GREEN="\[\e[0;32m\]"
            CYAN="\[\e[0;36m\]"
