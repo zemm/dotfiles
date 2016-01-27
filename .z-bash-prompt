@@ -44,10 +44,6 @@ COLOR_USERHOSTSPLIT=${COLOR_USERHOSTSPLIT:-$GREEN}
          VCS_PRE="${CYAN}("
         VCS_POST="${CYAN})"
 
-  VIRTUALENV_PRE=" ${CYAN}("
-VIRTUALENV_COLOR=""
- VIRTUALENV_POST="${CYAN})"
-
 
 # Git
 # =========================================================
@@ -215,7 +211,7 @@ function generate_system_bar() {
 function generate_virtualenv_bar() {
 	if test -n "$VIRTUAL_ENV"; then
 		virtualenv_name=$(basename "$VIRTUAL_ENV")
-		echo "${VIRTUALENV_PRE}${COLOR_VIRTUALENV}${virtualenv_name}${VIRTUALENV_POST}"
+		echo " ${BLUE}venv@${virtualenv_name}"
 	fi
 }
 
