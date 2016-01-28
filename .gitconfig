@@ -38,7 +38,7 @@
 	nobranch = red bold
 	unmerged = red bold
 [alias]
-	st = status -sb
+	st = status -s
 	ci = commit
 	co = checkout
 	cb = checkout -b
