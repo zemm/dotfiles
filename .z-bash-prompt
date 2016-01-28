@@ -172,8 +172,8 @@ function generate_system_bar() {
 }
 
 function generate_nvm_bar {
-	local version_pattern="node\/v([\.0-9]+)\/bin"
-	if [ "$NVM_BIN" != "" ] && [[ $NVM_BIN =~ ${version_pattern} ]]; then
+	local version_pattern="nvm\/versions\/node\/v([\.0-9]+)\/bin"
+	if [[ "$(which node 2>/dev/null)" =~ ${version_pattern} ]]; then
 		local version="${BASH_REMATCH[1]}"
 		echo " ${BLACK}nvm@${version}"
 	fi
