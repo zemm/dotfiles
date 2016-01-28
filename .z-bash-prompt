@@ -24,22 +24,21 @@
 
 # Presets
 
-          COLOR_USER=${COLOR_USER:-$GREEN}
-          COLOR_HOST=${COLOR_HOST:-$GREEN}
- COLOR_USERHOSTSPLIT=${COLOR_USERHOSTSPLIT:-$GREEN}
-           COLOR_CWD=${COLOR_CWD:-$LIGHT_PURPLE}
-	 COLOR_CWD_SLASH=${COLOR_CWD_SLASH:-$WHITE}
+COLOR_USER=${COLOR_USER:-$GREEN}
+COLOR_HOST=${COLOR_HOST:-$GREEN}
+COLOR_USERHOSTSPLIT=${COLOR_USERHOSTSPLIT:-$GREEN}
+COLOR_CWD=${COLOR_CWD:-$LIGHT_PURPLE}
+COLOR_CWD_SLASH=${COLOR_CWD_SLASH:-$WHITE}
 
-  COLOR_MODIFIED="$LIGHT_BLUE"
-     COLOR_ADDED="$LIGHT_GREEN"
-   COLOR_DELETED="$LIGHT_RED"
-   COLOR_UNCLEAN="$LIGHT_RED"
- COLOR_UNTRACKED="$LIGHT_PURPLE"
-   COLOR_STASHED="$YELLOW"
-    COLOR_REMOTE="$BROWN"
-   COLOR_DIVERGE="$BROWN"
-    COLOR_BRANCH="$CYAN"
-  COLOR_DETACHED="$CYAN"
+VCS_FLAG_MODIFIED="${LIGHT_BLUE}*"
+VCS_FLAG_ADDED="${LIGHT_GREEN}+"
+VCS_FLAG_DELETED="${LIGHT_RED}-"
+VCS_FLAG_UNCLEAN="${LIGHT_RED}!"
+VCS_FLAG_UNTRACKED="${LIGHT_PURPLE}?"
+VCS_FLAG_STASHED="${YELLOW}˷"
+VCS_FLAG_REMOTE_AHEAD="${BROWN}↑"
+VCS_FLAG_REMOTE_BEHIND="${BROWN}↓"
+VCS_FLAG_REMOTE_DIVERGE="${BROWN}↕"
 
 
 # Git
@@ -63,7 +62,7 @@ function generate_git_bar {
 
 	local branch=""
 	if [[ ${raw_status} =~ ${branch_pattern} ]]; then
-		branch=${COLOR_BRANCH}${BASH_REMATCH[1]}
+		branch=${CYAN}${BASH_REMATCH[1]}
 	elif [[ ${raw_status} =~ ${detached_at_pattern} ]]; then
 		local hash="${BASH_REMATCH[1]}"
 		local name="$(git describe --contains --all HEAD)"
@@ -75,26 +74,26 @@ function generate_git_bar {
 	local flags=""
 	if [[ ${raw_status} =~ ${remote_pattern} ]]; then
 		if [[ ${BASH_REMATCH[1]} == "ahead" ]]; then
-			flags="${COLOR_REMOTE}↑"
+			flags="${VCS_FLAG_REMOTE_AHEAD}"
 		else
-			flags="${COLOR_REMOTE}↓"
+			flags="${VCS_FLAG_REMOTE_BEHIND}"
 		fi
 	elif [[ ${raw_status} =~ ${diverge_pattern} ]]; then
-		flags="${COLOR_DIVERGE}↕"
+		flags="${VCS_FLAG_REMOTE_DIVERGE}"
 	fi
 
 	[ "$(git stash list 2>/dev/null)" ] \
-		&& flags="${flags}${COLOR_STASHED}˷"
+		&& flags="${flags}${VCS_FLAG_STASHED}"
 	[[ ${raw_status} =~ "You have unmerged paths" ]] \
-		&& flags="${flags}${COLOR_UNCLEAN}!"
+		&& flags="${flags}${VCS_FLAG_UNCLEAN}"
 	[[	${raw_status} =~ "#	modified: " || ${raw_status} =~ "#	renamed: " ]] \
-		&& flags="${flags}${COLOR_MODIFIED}*"
+		&& flags="${flags}${VCS_FLAG_MODIFIED}"
 	[[ ${raw_status} =~ "#	new file: " ]] \
-		&& flags="${flags}${COLOR_ADDED}+"
+		&& flags="${flags}${VCS_FLAG_ADDED}"
 	[[ ${raw_status} =~ "#	deleted: " ]] \
-		&& flags="${flags}${COLOR_DELETED}-"
+		&& flags="${flags}${VCS_FLAG_DELETED}"
 	[[ ${raw_status}} =~ "Untracked files" ]] \
-		&& flags="${flags}${COLOR_UNTRACKED}?"
+		&& flags="${flags}${VCS_FLAG_UNTRACKED}"
 
 	[[ -n $flags ]] && flags=" ${flags}"
 
@@ -122,24 +121,24 @@ function generate_mercurial_bar {
 
 	local state=""
 	if echo "$hg_status" | egrep -q "${modified_pattern}"; then
-		state="${state}${COLOR_MODIFIED}*"
+		state="${state}${VCS_FLAG_MODIFIED}"
 	fi
 	if echo "$hg_status" | egrep -q "${added_pattern}"; then
-		state="${state}${COLOR_ADDED}+"
+		state="${state}${VCS_FLAG_ADDED}"
 	fi
 	if echo "$hg_status" | egrep -q "${deleted_pattern}"; then
-		state="${state}${COLOR_DELETED}-"
+		state="${state}${VCS_FLAG_DELETED}"
 	fi
 	if echo "$hg_status" | egrep -q "${untracked_pattern}"; then
-		state="${state}${COLOR_UNTRACKED}?"
+		state="${state}${VCS_FLAG_UNTRACKED}"
 	fi
 	if echo "$hg_status" | egrep -q "${unclean_pattern}"; then
-		state="${state}${COLOR_UNCLEAN}!"
+		state="${state}${VCS_FLAG_UNCLEAN}"
 	fi
 
 	local branch
 	if [[ ${hg_summary} =~ branch:[[:space:]]([^[[:space:]]+) ]]; then
-		branch="${COLOR_BRANCH}${BASH_REMATCH[1]}:"
+		branch="${CYAN}${BASH_REMATCH[1]}:"
 	else
 		branch="${BROWN}NO BRANCH"
 	fi
@@ -147,7 +146,7 @@ function generate_mercurial_bar {
 	# @TODO: multiple bookmarks?
 	local bookmarks
 	if [[ ${hg_summary} =~ bookmarks:[[:space:]]([^[[:space:]]+) ]]; then
-		bookmarks="${COLOR_BRANCH}${BASH_REMATCH[1]}:"
+		bookmarks="${CYAN}${BASH_REMATCH[1]}:"
 	else
 		bookmarks=""
 	fi
