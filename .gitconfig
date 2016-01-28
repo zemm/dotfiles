@@ -32,9 +32,9 @@
 [color "status"]
 	header = black bold
 	added = green bold
-	changed = magenta bold
-	untracked = red
-	branch = blue bold
+	changed = blue bold
+	untracked = magenta bold
+	branch = green bold
 	nobranch = red bold
 	unmerged = red bold
 [alias]
