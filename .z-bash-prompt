@@ -256,6 +256,10 @@ function log_action() {
 function prompt_func() {
 	ACTION_LOG=""
 
+	local line1_pre="${BLACK}─┬"  # "${BLACK}╭ "
+	local line2_pre="${BLACK} ╰"  # "${BLACK}╰ "
+	local vcs_post="${BLACK}╯"
+
 	# <user>@<host>
 	local userbar="${COLOR_USER}\u${COLOR_USERHOSTSPLIT}@${COLOR_HOST}\h"
 
@@ -285,9 +289,9 @@ function prompt_func() {
 	# vcs
 	local vcsbar=""
 	if is_git_repository; then
-		vcsbar="$(generate_git_bar) "
+		vcsbar="$(generate_git_bar)${vcs_post}"
 	elif is_mercurial_repository; then
-		vcsbar="$(generate_mercurial_bar) "
+		vcsbar="$(generate_mercurial_bar)${vcs_post}"
 	fi
 
 	# system
@@ -300,8 +304,8 @@ function prompt_func() {
 	# \t 24h time HH:MM:SS
 	# \W basename of CWD
 
-	local line1="${BLACK}╭ ${userbar} ${cwdbar}$(generate_venv_bar)$(generate_nvm_bar)"
-	local line2="${BLACK}╰ ${vcsbar}${sysbar}${BLACK}╯ ${prompt}"
+	local line1="${line1_pre}${userbar} ${cwdbar}$(generate_venv_bar)$(generate_nvm_bar)"
+	local line2="${line2_pre}${vcsbar}${sysbar}${prompt}"
 	PS1="${actionlog}${line1}\n${line2}"
 }
 
