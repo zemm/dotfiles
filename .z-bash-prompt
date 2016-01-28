@@ -28,6 +28,7 @@
           COLOR_HOST=${COLOR_HOST:-$GREEN}
  COLOR_USERHOSTSPLIT=${COLOR_USERHOSTSPLIT:-$GREEN}
            COLOR_CWD=${COLOR_CWD:-$LIGHT_PURPLE}
+	 COLOR_CWD_SLASH=${COLOR_CWD_SLASH:-$WHITE}
 
   COLOR_MODIFIED="$LIGHT_BLUE"
      COLOR_ADDED="$LIGHT_GREEN"
@@ -257,8 +258,12 @@ function prompt_func() {
 
 	# <user>@<host>
 	local userbar="${COLOR_USER}\u${COLOR_USERHOSTSPLIT}@${COLOR_HOST}\h"
+
 	# <current working directory>
-	local cwdbar="${COLOR_CWD}\w"
+	#local cwdbar="${COLOR_CWD}\w"
+	# Let's be fancy!
+	local nice_pwd="$(sed "s#^$HOME#~#" <<<$PWD)"
+	local cwdbar="${COLOR_CWD}${nice_pwd//\//${COLOR_CWD_SLASH}/${COLOR_CWD}}"
 
 	# preprocess
 	auto_virtualenv
@@ -288,13 +293,15 @@ function prompt_func() {
 	# system
 	local sysbar="$(generate_system_bar)"
 
+	# https://en.wikipedia.org/wiki/Box-drawing_character
+	#
 	# \! history number of this command
 	# \# command number of this command
 	# \t 24h time HH:MM:SS
 	# \W basename of CWD
 
 	local line1="${BLACK}╭ ${userbar} ${cwdbar}$(generate_venv_bar)$(generate_nvm_bar)"
-	local line2="${BLACK}╰ ${vcsbar}${sysbar}${prompt}"
+	local line2="${BLACK}╰ ${vcsbar}${sysbar}${BLACK}╯ ${prompt}"
 	PS1="${actionlog}${line1}\n${line2}"
 }
 
