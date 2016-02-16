@@ -5,7 +5,8 @@ function git_changelog() {
 		return 1
 	fi
 
-	git log --pretty=format:"- %s%n  [%an]" "`git describe --tags|grep -o '^[^-]*'`"..HEAD;
+	git log --pretty=format:"- %s%n  [%an]" "`git describe --tags|grep -o '^[^-]*'`"..HEAD \
+		| sed -n '/- Back to development/!p; :m // { $! { n; b m } }'
 }
 
 function git_changelog_write() {
