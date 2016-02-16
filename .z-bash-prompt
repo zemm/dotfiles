@@ -175,7 +175,15 @@ function generate_nvm_bar {
 	local version_pattern="nvm\/versions\/node\/v([\.0-9]+)\/bin"
 	if [[ "$(which node 2>/dev/null)" =~ ${version_pattern} ]]; then
 		local version="${BASH_REMATCH[1]}"
-		echo " ${BLACK}nvm@${version}"
+		echo " ${BLACK}node@${version}"
+	fi
+}
+
+function generate_gvm_bar {
+	local version_pattern="gvm\/gos\/go([\.0-9]+)\/bin"
+	if [[ "$(which go 2>/dev/null)" =~ ${version_pattern} ]]; then
+		local version="${BASH_REMATCH[1]}"
+		echo " ${BLACK}go@${version}"
 	fi
 }
 
@@ -303,7 +311,7 @@ function prompt_func() {
 	# \t 24h time HH:MM:SS
 	# \W basename of CWD
 
-	local line1="${line1_pre}${userbar} ${cwdbar}$(generate_venv_bar)$(generate_nvm_bar)"
+	local line1="${line1_pre}${userbar} ${cwdbar}$(generate_venv_bar)$(generate_nvm_bar)$(generate_gvm_bar)"
 	local line2="${line2_pre}${vcsbar}${sysbar}${prompt}"
 	PS1="${actionlog}${line1}\n${line2}"
 }
