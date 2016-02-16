@@ -2,7 +2,7 @@
 	name = Jussi Rajala
 	email = zemm@iki.fi
 [push]
-	default = simple
+	default = current
 	followTags = true
 [github]
 	username = zemm
