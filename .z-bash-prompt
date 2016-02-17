@@ -263,9 +263,17 @@ function log_action() {
 function prompt_func() {
 	ACTION_LOG=""
 
-	local line1_pre="${BLACK}─┬"  # "${BLACK}╭ "
-	local line2_pre="${BLACK} ╰"  # "${BLACK}╰ "
-	local vcs_post="${BLACK}╯"
+	#local line1_pre="${BLACK}─┬"
+	#local line2_pre="${BLACK} ╰"
+	#local vcs_post="${BLACK}╯"
+
+	#local line1_pre="${BLACK}╭ "
+	#local line2_pre="${BLACK}╰ "
+	#local vcs_post="${BLACK}╯"
+
+	local line1_pre=""
+	local line2_pre=""
+	local vcs_post=" "
 
 	# <user>@<host>
 	local userbar="${COLOR_USER}\u${COLOR_USERHOSTSPLIT}@${COLOR_HOST}\h"
