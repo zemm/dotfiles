@@ -1,8 +1,15 @@
-TB='Kensington      Kensington Expert Mouse'
-if xinput list | grep -q "$TB"; then
-	echo setup $TB...
-	xinput set-prop "$TB" 'Evdev Wheel Emulation' 1
-	xinput set-prop "$TB" 'Evdev Wheel Emulation Button' 8
+
+DEV='Kensington      Kensington Expert Mouse'
+if xinput list | grep -q "$DEV"; then
+	echo setup $EV
+	xinput set-prop "$DEV" 'Evdev Wheel Emulation' 1
+	xinput set-prop "$DEV" 'Evdev Wheel Emulation Button' 8
+fi
+
+DEV="SynPS/2 Synaptics TouchPad"
+if xinput list | grep -q "$DEV"; then
+	echo setup $DEV
+	xinput set-prop "$DEV" "Synaptics Palm Detection" 1
 fi
 
 if type "xmodmap" > /dev/null; then
