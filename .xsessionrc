@@ -1,0 +1,65 @@
+function log {
+	if [ -t 1 ]; then
+		echo "$1"
+	fi
+}
+
+DEV='Kensington      Kensington Expert Mouse'
+if xinput list | grep -q "$DEV"; then
+	log "setup $EV"
+	xinput set-prop "$DEV" 'Evdev Wheel Emulation' 1
+	xinput set-prop "$DEV" 'Evdev Wheel Emulation Button' 8
+fi
+
+DEV="SynPS/2 Synaptics TouchPad"
+if xinput list | grep -q "$DEV"; then
+	log "setup $DEV"
+	xinput set-prop "$DEV" "Synaptics Palm Detection" 1
+fi
+
+if which xmodmap > /dev/null; then
+	log "setup xmodmap key remappings"
+	# Remove Caps Lock
+	#xmodmap -e "remove Lock = Caps_Lock"
+	log " - bind backspace to Caps Lock"
+	xmodmap -e "keycode 66 = BackSpace"
+	xmodmap -e "clear Lock"
+fi
+
+if which setxkbmap > /dev/null; then
+	log "setup setxkbmap options..."
+	setxkbmap -option "nbsp:none"
+	setxkbmap -option "caps:backspace"
+fi
+
+KB_INTERVAL=32
+KB_DELAY=230
+log "setup keyboard repeat rate: $KB_INTERVAL / $KB_DELAY"
+
+if which gsettings > /dev/null; then
+	log "setup gsettings keyboard rates"
+
+	log " - generic"
+	xset r rate $KB_DELAY $KB_INTERVAL
+	2>/dev/null gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval $KB_INTERVAL
+	2>/dev/null gsettings set org.gnome.desktop.peripherals.keyboard delay $KB_DELAY
+
+	log " - gnome"
+	2>/dev/null gsettings set org.gnome.settings-daemon.peripherals.keyboard repeat-interval $KB_INTERVAL
+	2>/dev/null gsettings set org.gnome.settings-daemon.peripherals.keyboard delay $KB_DELAY
+
+	log " - cinnamon"
+	2>/dev/null gsettings set org.cinnamon.settings-daemon.peripherals.keyboard repeat-interval $KB_INTERVAL
+	2>/dev/null gsettings set org.cinnamon.settings-daemon.peripherals.keyboard delay $KB_DELAY
+
+	log "enable rmb resize for gnome"
+	2>/dev/null gsettings set org.gnome.desktop.wm.preferences resize-with-right-button true
+	log "enable rmb resize for cinnamon"
+	2>/dev/null gsettings set org.cinnamon.desktop.wm.preferences resize-with-right-button true
+fi
+
+if which xfconf-query > /dev/null; then
+	log "setup keyboard rates for xfce"
+	xfconf-query -c keyboards -p /Default/KeyRepeat/Delay -s $KB_DELAY
+	xfconf-query -c keyboards -p /Default/KeyRepeat/Rate -s $KB_INTERVAL
+fi
