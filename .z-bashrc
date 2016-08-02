@@ -20,3 +20,4 @@ fi
 [ -f ~/.z-bash-functions ] && . ~/.z-bash-functions
 [ -f ~/.z-bash-aliases ] && . ~/.z-bash-aliases
 [ -f ~/.z-bash-prompt ] && . ~/.z-bash-prompt
+[ -f ~/.z-bash-local ] && . ~/.z-bash-local
