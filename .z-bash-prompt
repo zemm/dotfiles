@@ -202,6 +202,11 @@ function generate_nix_bar() {
 }
 
 function auto_virtualenv() {
+	# skip if using other than .venv virtualenv
+	if [[ -n $VIRTUAL_ENV ]] && [[ "$VIRTUAL_ENV" != */.venv ]]; then
+		return
+	fi
+
 	# work only at whitelisted locations
 	[[ -n "$AUTO_VENV_PATHS" ]] || return
 	local cwd=$(pwd)
