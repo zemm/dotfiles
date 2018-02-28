@@ -20,6 +20,9 @@
     zip
   ];
 
+  home.sessionVariables.LANG = "en_US.UTF-8";
+  home.sessionVariables.LC_ALL = "fi_FI.UTF-8";
+
   programs.bash = {
     enable = true;
   #  enableCompletion = true;
