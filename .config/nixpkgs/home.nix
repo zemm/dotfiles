@@ -1,36 +1,12 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    atom
-    chromium
-    firefox
-    gimp
-    # gitFull
-    gnumake
-    gnupg
-    htop
-    imagemagick
-    # inkscape
-    jq
-    pass
-    unzip
-    vagrant
-    vlc
-    zip
-  ];
+#  home.packages = with pkgs; [
+#    kicad
+#  ];
 
   home.sessionVariables.LANG = "en_US.UTF-8";
   home.sessionVariables.LC_ALL = "fi_FI.UTF-8";
-
-  programs.bash = {
-    enable = true;
-  #  enableCompletion = true;
-  };
-
-  #programs.git = {
-  #  enable = true; # @TODO
-  #};
 
   programs.zsh = {
     enable = true;
@@ -44,7 +20,9 @@
       bindkey -e
       bindkey "^[[1;5C" forward-word
       bindkey "^[[1;5D" backward-word
-      export EDITOR=nano;
+      export SPACESHIP_EXIT_CODE_SHOW=true
+      export SPACESHIP_DIR_TRUNC=0
+      export SPACESHIP_DIR_TRUNC_REPO=false
       export SPACESHIP_PROMPT_ORDER=(
         time          # Time stampts section
         user          # Username section
@@ -79,9 +57,6 @@
         exit_code     # Exit code section
         char          # Prompt character
       )
-      export SPACESHIP_EXIT_CODE_SHOW=true
-      export SPACESHIP_DIR_TRUNC=0
-      export SPACESHIP_DIR_TRUNC_REPO=false
     '';
     plugins = [
       {
@@ -93,15 +68,6 @@
           sha256 = "1x4cqlcm985lcy1q9fqh1dd6dj0gvnr58jz7l416h7mr4a5b2r9m";
         };
       }
-    #  {
-    #    name = "zplug";
-    #    file = "init.zsh";
-    #    src = pkgs.fetchgit {
-    #      url = "https://github.com/zplug/zplug";
-    #      rev = "2.4.2";
-    #      sha256 = "0hci1pbs3k5icwfyfw5pzcgigbh9vavprxxvakg1xm19n8zb61b3";
-    #    };
-    #  }
     ];
   };
 
@@ -117,10 +83,4 @@
   #  grabKeyboardAndMouse = true;
   #  # enableScDaemon = true; # @TODO ?
   #};
-
-  services.redshift = {
-    enable = true;
-    latitude = "62.14";
-    longitude = "25.44";
-  };
 }
