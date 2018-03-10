@@ -57,6 +57,7 @@
         exit_code     # Exit code section
         char          # Prompt character
       )
+      [ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"
     '';
     plugins = [
       {
