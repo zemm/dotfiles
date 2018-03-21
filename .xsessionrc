@@ -17,6 +17,13 @@ if xinput list | grep -q "$DEV"; then
 	xinput set-prop "$DEV" "Synaptics Palm Detection" 1
 fi
 
+DEV="TPPS/2 IBM TrackPoint"
+if xinput list | grep -q "$DEV"; then
+	log "setup $DEV"
+	xinput set-prop "$DEV" "libinput Accel Profile Enabled" 0 1
+	xinput set-prop "$DEV" "libinput Accel Speed" 1.0
+fi
+
 if which xmodmap > /dev/null; then
 	log "setup xmodmap key remappings"
 	# Remove Caps Lock
