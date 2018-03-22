@@ -160,3 +160,6 @@ bar {
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -5%
 bindsym XF86AudioMute exec pactl set-sink-mute 0 toggle
+
+# lock and suspend
+bindsym $mod+End exec --no-startup-id "i3lock -c 000000 && systemctl suspend"
