@@ -94,18 +94,19 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
 # focus the child container
+bindsym $mod+shift+a focus child
 #bindsym $mod+d focus child
 
-set $workspace1 "1:Comm "
-set $workspace2 "2:Read "
-set $workspace3 "3:Watch "
-set $workspace4 "4 "
-set $workspace5 "5 "
-set $workspace6 "6 "
-set $workspace7 "7 "
-set $workspace8 "8 "
-set $workspace9 "9 "
-set $workspace0 "10:Steam "
+set $workspace1 "1. Comm"
+set $workspace2 "2. Read"
+set $workspace3 "3. Watch"
+set $workspace4 "4. Code"
+set $workspace5 "5. Code"
+set $workspace6 "6. Term"
+set $workspace7 "7. Conf"
+set $workspace8 "8. Misc"
+set $workspace9 "9. Misc"
+set $workspace0 "10. Steam"
 
 # switch to workspace
 bindsym $mod+1 workspace $workspace1
