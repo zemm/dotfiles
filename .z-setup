@@ -1,0 +1,10 @@
+echo "## Setup spaceship prompt"
+if [ ! -d ~/github/denysdovhan/spaceship-prompt ]; then
+	mkdir -p ~/github/denyshovhan
+	git clone https://github.com/denysdovhan/spaceship-prompt.git ~/github/denysdovhan
+fi
+if [ ! -s ~/.zfunctions/prompt_spaceship_setup ]; then
+	mkdir -p ~/.zfunctions
+	ln -s ~/github/denyshovhan/spaceship.zsh ~/.zfunctions/prompt_spaceship_setup
+fi
+
