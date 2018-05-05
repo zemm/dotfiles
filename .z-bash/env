@@ -10,12 +10,6 @@ if test -f /usr/bin/virtualenvwrapper.sh; then
 	source /usr/bin/virtualenvwrapper.sh
 fi
 
-# GO
-#export GOROOT=$HOME/.local/go
-#export GOPATH=$HOME/go
-#export PATH=$PATH:$GOROOT/bin
-#export PATH=$PATH:$GOPATH/bin
-
 # path
 path_prepend() {
 	if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
@@ -29,8 +23,3 @@ path_append() {
 }
 
 path_prepend "$HOME/bin"
-path_append "$HOME/.local/bin"
-path_append "$HOME/node_modules/.bin"
-path_append "$HOME/.cabal/bin"
-path_append "$HOME/.local/go/bin"
-path_append "$HOME/go/bin"
