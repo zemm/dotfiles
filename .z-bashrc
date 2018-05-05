@@ -18,7 +18,8 @@ fi
 [ -f ~/.z-bash/env ] && . ~/.z-bash/env
 [ -d ~/.local/bash_completion.d ] && . ~/.local/bash_completion.d/*
 [ -f ~/.z-bash/functions ] && . ~/.z-bash/functions
-[ -f ~/.z-bash/aliases ] && . ~/.z-bash/aliases
 [ -f ~/.z-bash/prompt ] && . ~/.z-bash/prompt
 [ -f ~/.z-bash/local ] && . ~/.z-bash/local
 [ -f ~/.nix-profile/etc/profile.d/nix.sh ] && . /home/zemm/.nix-profile/etc/profile.d/nix.sh
+[ -f ~/.aliases ] && . ~/.aliases
+

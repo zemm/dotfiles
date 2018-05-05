@@ -16,3 +16,4 @@ autoload -U promptinit; promptinit
 [ -f .zfunctions/prompt_spaceship_setup ] && prompt spaceship
 
 [ -f /home/zemm/.nix-profile/etc/profile.d/nix.sh ] && source /home/zemm/.nix-profile/etc/profile.d/nix.sh
+[ -f ~/.aliases ] && source ~/.aliases
