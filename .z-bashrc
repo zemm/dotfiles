@@ -21,3 +21,4 @@ fi
 [ -f ~/.z-bash/aliases ] && . ~/.z-bash/aliases
 [ -f ~/.z-bash/prompt ] && . ~/.z-bash/prompt
 [ -f ~/.z-bash/local ] && . ~/.z-bash/local
+[ -f ~/.nix-profile/etc/profile.d/nix.sh ] && . /home/zemm/.nix-profile/etc/profile.d/nix.sh
