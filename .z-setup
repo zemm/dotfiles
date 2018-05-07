@@ -1,10 +1,10 @@
 echo "## Setup spaceship prompt"
 if [ ! -d ~/github/denysdovhan/spaceship-prompt ]; then
-	mkdir -p ~/github/denyshovhan
-	git clone https://github.com/denysdovhan/spaceship-prompt.git ~/github/denysdovhan
+	mkdir -p ~/github/denysdovhan
+	git clone https://github.com/denysdovhan/spaceship-prompt.git ~/github/denysdovhan/spaceship-prompt
 fi
 if [ ! -s ~/.zfunctions/prompt_spaceship_setup ]; then
 	mkdir -p ~/.zfunctions
-	ln -s ~/github/denyshovhan/spaceship.zsh ~/.zfunctions/prompt_spaceship_setup
+	ln -s ~/github/denysdovhan/spaceship-prompt/spaceship.zsh ~/.zfunctions/prompt_spaceship_setup
 fi
 
