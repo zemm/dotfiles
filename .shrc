@@ -1,0 +1,10 @@
+alias s="screen -Urd"
+alias sl="sl -e"
+alias less="less -R"
+alias homekeeper='git --git-dir="${HOME}/.homekeeper" --work-tree="${HOME}"'
+
+alias platformio-ide='ATOM_HOME="${HOME}/.platformio-ide" atom'
+
+export EDITOR=nano
+
+[ -f ${HOME}/.nix-profile/etc/profile.d/nix.sh ] && source ${HOME}/.nix-profile/etc/profile.d/nix.sh

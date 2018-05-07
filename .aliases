@@ -1,5 +1,0 @@
-alias s="screen -Urd"
-alias sl="sl -e"
-alias less="less -R"
-
-alias platformio-ide='ATOM_HOME=~/.platformio-ide atom'
