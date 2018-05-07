@@ -1,6 +1,7 @@
 alias s="screen -Urd"
 alias sl="sl -e"
 alias less="less -R"
+alias ls="ls --color=auto"
 alias homekeeper='git --git-dir="${HOME}/.homekeeper" --work-tree="${HOME}"'
 
 alias platformio-ide='ATOM_HOME="${HOME}/.platformio-ide" atom'
