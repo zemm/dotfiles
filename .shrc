@@ -8,4 +8,5 @@ alias platformio-ide='ATOM_HOME="${HOME}/.platformio-ide" atom'
 
 export EDITOR=nano
 
-[ -f ${HOME}/.nix-profile/etc/profile.d/nix.sh ] && source ${HOME}/.nix-profile/etc/profile.d/nix.sh
+# Installer should put this into .profile
+#[ -f ${HOME}/.nix-profile/etc/profile.d/nix.sh ] && source ${HOME}/.nix-profile/etc/profile.d/nix.sh
