@@ -10,12 +10,6 @@
 	helper = cache --timeout=7200
 [credential "https://github.com"]
 	username = zemm
-[merge]
-	tool = meld
-[diff]
-	tool = meld
-[mergetool]
-	keepBackup = false
 [color]
 	ui = auto
 # http://git-scm.com/docs/git-config
