@@ -43,6 +43,8 @@ KB_INTERVAL=32
 KB_DELAY=230
 log "setup keyboard repeat rate: $KB_INTERVAL / $KB_DELAY"
 
+xset r rate $KB_DELAY $KB_INTERVAL
+
 if which gsettings > /dev/null; then
 	log "setup gsettings keyboard rates"
 
