@@ -98,15 +98,31 @@ bindsym $mod+shift+a focus child
 #bindsym $mod+d focus child
 
 set $workspace1 "1. Comm"
-set $workspace2 "2. Read"
-set $workspace3 "3. Watch"
+set $workspace2 "2. Watch"
+set $workspace3 "3. Read"
 set $workspace4 "4. Code"
 set $workspace5 "5. Code"
-set $workspace6 "6. Term"
-set $workspace7 "7. Conf"
-set $workspace8 "8. Misc"
-set $workspace9 "9. Misc"
+set $workspace6 "6. Misc"
+set $workspace7 "7. Misc"
+set $workspace8 "8. Term"
+set $workspace9 "9. Conf"
 set $workspace0 "10. Steam"
+
+set $output_left "DP1-3"
+set $output_center "DP2-2"
+set $output_right "DP1-2"
+
+# assign workspaces to outputs
+workspace $workspace1 output $output_left
+workspace $workspace2 output $output_left
+workspace $workspace3 output $output_left
+workspace $workspace4 output $output_center
+workspace $workspace5 output $output_center
+workspace $workspace6 output $output_center
+workspace $workspace7 output $output_center
+workspace $workspace8 output $output_right
+workspace $workspace9 output $output_right
+workspace $workspace0 output $output_right
 
 # switch to workspace
 bindsym $mod+1 workspace $workspace1
@@ -131,6 +147,10 @@ bindsym $mod+Shift+7 move container to workspace $workspace7
 bindsym $mod+Shift+8 move container to workspace $workspace8
 bindsym $mod+Shift+9 move container to workspace $workspace9
 bindsym $mod+Shift+0 move container to workspace $workspace0
+
+# switch to external displays
+bindsym $mod+Shift+y exec "autorandr int"
+bindsym $mod+Control+y exec "autorandr ext"
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
