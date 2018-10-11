@@ -56,3 +56,4 @@
 	dh3 = diff HEAD~3
 	dh4 = diff HEAD~4
 	dh5 = diff HEAD~5
+	versioned = ls-tree -r --name-only HEAD
