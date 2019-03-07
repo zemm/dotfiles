@@ -192,12 +192,11 @@ bar {
 }
 
 # Pulse Audio controls
-#bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-#bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
-#bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 1 +5%
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume 1 -5%
-bindsym XF86AudioMute exec pactl set-sink-mute 1 toggle
+#set $pasink "@DEFAULT_SINK@"
+set $pasink 2
+bindsym XF86AudioRaiseVolume exec --no-startup-id "pactl set-sink-volume $pasink +5%"
+bindsym XF86AudioLowerVolume exec --no-startup-id "pactl set-sink-volume $pasink -5%"
+bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute $pasink toggle"
 
 # lock and suspend
 bindsym $mod+End exec --no-startup-id "i3lock-fancy -p && systemctl suspend"
