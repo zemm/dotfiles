@@ -115,11 +115,11 @@ set $output_right "DP1-2"
 # assign workspaces to outputs
 workspace $workspace1 output $output_left
 workspace $workspace2 output $output_left
-workspace $workspace3 output $output_left
+workspace $workspace3 output $output_center
 workspace $workspace4 output $output_center
 workspace $workspace5 output $output_center
 workspace $workspace6 output $output_center
-workspace $workspace7 output $output_center
+workspace $workspace7 output $output_right
 workspace $workspace8 output $output_right
 workspace $workspace9 output $output_right
 workspace $workspace0 output $output_right
@@ -193,7 +193,7 @@ bar {
 
 # Pulse Audio controls
 #set $pasink "@DEFAULT_SINK@"
-set $pasink 2
+set $pasink 1
 bindsym XF86AudioRaiseVolume exec --no-startup-id "pactl set-sink-volume $pasink +5%"
 bindsym XF86AudioLowerVolume exec --no-startup-id "pactl set-sink-volume $pasink -5%"
 bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute $pasink toggle"
