@@ -97,16 +97,16 @@ bindsym $mod+a focus parent
 bindsym $mod+shift+a focus child
 #bindsym $mod+d focus child
 
-set $workspace1 "1. Comm"
-set $workspace2 "2. Watch"
-set $workspace3 "3. Read"
-set $workspace4 "4. Code"
-set $workspace5 "5. Code"
-set $workspace6 "6. Misc"
-set $workspace7 "7. Misc"
-set $workspace8 "8. Term"
-set $workspace9 "9. Conf"
-set $workspace0 "10. Steam"
+set $workspace1 "1  "
+set $workspace2 "2  "
+set $workspace3 "3  "
+set $workspace4 "4  "
+set $workspace5 "5  "
+set $workspace6 "6  "
+set $workspace7 "7  "
+set $workspace8 "8  "
+set $workspace9 "9  "
+set $workspace0 "0  "
 
 set $output_left "eDP1"
 set $output_center "DP2-2"
@@ -115,11 +115,11 @@ set $output_right "DP1-2"
 # assign workspaces to outputs
 workspace $workspace1 output $output_left
 workspace $workspace2 output $output_left
-workspace $workspace3 output $output_center
+workspace $workspace3 output $output_left
 workspace $workspace4 output $output_center
 workspace $workspace5 output $output_center
 workspace $workspace6 output $output_center
-workspace $workspace7 output $output_right
+workspace $workspace7 output $output_center
 workspace $workspace8 output $output_right
 workspace $workspace9 output $output_right
 workspace $workspace0 output $output_right
