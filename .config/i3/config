@@ -197,22 +197,23 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id "pactl set-sink-volume $pasink
 bindsym XF86AudioLowerVolume exec --no-startup-id "pactl set-sink-volume $pasink -5%"
 bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute $pasink toggle"
 
+bindsym $mod+m exec pavucontrol
+
 # lock and suspend
 #bindsym $mod+End exec --no-startup-id "i3lock-fancy -p && systemctl suspend"
 #bindsym $mod+Home exec --no-startup-id "i3lock-fancy -p"
-bindsym $mod+End exec --no-startup-id "i3lock-color -fek -i Pictures/lock.jpg && systemctl suspend"
-bindsym $mod+Home exec --no-startup-id "i3lock-color -fek -i Pictures/lock.jpg"
-
+bindsym $mod+End exec --no-startup-id "i3lock-color -ftek -i Pictures/lock.jpg && systemctl suspend"
+bindsym $mod+Home exec --no-startup-id "i3lock-color -ftek -i Pictures/lock.jpg"
 
 #
 # Autostarts
 #
 
-exec --no-startup-id feh --bg-scale ~/Pictures/wall.jpg || :
+exec_always --bg-scale ~/Pictures/wall.jpg || :
 exec --no-startup-id volumeicon
 exec --no-startup-id nm-applet
 exec --no-startup-id shutter --min_at_startup
-exec --no-startup-id xautolock -time 10 -locker "i3lock-color -fek -i Pictures/lock.jpg"
+exec --no-startup-id xautolock -time 10 -locker "i3lock-color -ftek -i Pictures/lock.jpg"
 
 
 # Open specific applications in floating mode
@@ -243,7 +244,7 @@ font xft:Ubuntu Mono 12
 
 # Colors
 set $black	#000000
-set $blue 	#1b1e26
+set $blue	#1b1e26
 set $yellow	#f0d48b
 set $darky	#433f15
 set $grey	#b0b287
@@ -299,19 +300,19 @@ bar {
 #client.placeholder      #000000 #0c0c0c #ffffff #000000 #0c0c0c
 #client.background       #2B2C2B
 
-# class                 border  	backgr.		text		indic.		child_border
-#client.focused		$yellow 	$blue		$yellow		$yellow		$yellow
+# class                 border		backgr.		text		indic.		child_border
+#client.focused		$yellow		$blue		$yellow		$yellow		$yellow
 #client.focused_inactive	$yellow		$blue		$grey		$yellow		$yellow	
 #client.unfocused	$yellow		$blue		$grey		$yellow		$yellow
 #client.urgent		$yellow		$blue		$yellow		$yellow		$yellow
-#client.placeholder	$yellow		$blue		$yellow		$yellow 	$yellow
+#client.placeholder	$yellow		$blue		$yellow		$yellow		$yellow
 #client.background	$blue
 
-# class                 border  	backgr.		text		indic.		child_border
-client.focused		$blue	 	$darky		$yellow		$red		$green
+# class                 border		backgr.		text		indic.		child_border
+client.focused		$blue		$darky		$yellow		$red		$green
 client.focused_inactive	$blue		$blue		$yellow		$red		$blue	
 client.unfocused	$blue		$blue		$yellow		$red		$blue
 client.urgent		$red		$red		$blue		$red		$blue
-client.placeholder	$blue		$blue		$blue		$red 	$blue
+client.placeholder	$blue		$blue		$blue		$red		$blue
 client.background	$blue
 
