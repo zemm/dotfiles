@@ -209,7 +209,7 @@ bindsym $mod+Home exec --no-startup-id "i3lock-color -ftek -i Pictures/lock.jpg"
 # Autostarts
 #
 
-exec_always --bg-scale ~/Pictures/wall.jpg || :
+exec_always feh --bg-scale ~/Pictures/wall.jpg || :
 exec --no-startup-id volumeicon
 exec --no-startup-id nm-applet
 exec --no-startup-id shutter --min_at_startup
