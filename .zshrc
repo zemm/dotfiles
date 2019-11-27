@@ -17,11 +17,12 @@ compinit
 export SPACESHIP_EXIT_CODE_SHOW=true
 export SPACESHIP_DIR_TRUNC=0
 export SPACESHIP_DIR_TRUNC_REPO=false
+export GOPATH="$HOME/go"
 
 fpath=( "$HOME/.zfunctions" $fpath )
 
 autoload -U promptinit; promptinit
-[ -f .zfunctions/prompt_spaceship_setup ] && prompt spaceship
+[ -f ~/.zfunctions/prompt_spaceship_setup ] && prompt spaceship
 
 # Common for all shells
 [ -f ~/.shrc ] && source ~/.shrc
