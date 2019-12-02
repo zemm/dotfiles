@@ -234,7 +234,7 @@ for_window [class="(?i)virtualbox"] floating enable border normal
 # Theming, might be stolen from the internet
 #
 
-new_window pixel 1
+new_window pixel 2
 new_float normal
 hide_edge_borders none
 
@@ -292,25 +292,10 @@ bar {
 
 
 # Theme colors
-# class                 border  backgr. text    indic.  child_border
-#client.focused          #808280 #808280 #80FFF9 #FDF6E3
-#client.focused_inactive #434745 #434745 #16A085 #454948
-#client.unfocused        #434745 #434745 #16A085 #454948
-#client.urgent           #CB4B16 #FDF6E3 #16A085 #268BD2
-#client.placeholder      #000000 #0c0c0c #ffffff #000000 #0c0c0c
-#client.background       #2B2C2B
 
 # class                 border		backgr.		text		indic.		child_border
-#client.focused		$yellow		$blue		$yellow		$yellow		$yellow
-#client.focused_inactive	$yellow		$blue		$grey		$yellow		$yellow	
-#client.unfocused	$yellow		$blue		$grey		$yellow		$yellow
-#client.urgent		$yellow		$blue		$yellow		$yellow		$yellow
-#client.placeholder	$yellow		$blue		$yellow		$yellow		$yellow
-#client.background	$blue
-
-# class                 border		backgr.		text		indic.		child_border
-client.focused		$blue		$darky		$yellow		$red		$green
-client.focused_inactive	$blue		$blue		$yellow		$red		$blue	
+client.focused		$blue		$yellow		$black		$red		$yellow
+client.focused_inactive	$blue		$darky		$yellow		$red		$blue
 client.unfocused	$blue		$blue		$yellow		$red		$blue
 client.urgent		$red		$red		$blue		$red		$blue
 client.placeholder	$blue		$blue		$blue		$red		$blue
