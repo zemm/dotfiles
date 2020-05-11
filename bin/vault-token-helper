@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -e -o pipefail
+
+TOKENS_FILE=~/.vault-tokens
+
+# Check for prerequisites
+which jq >/dev/null
+test -f "$TOKENS_FILE" || (umask 077 && echo '{}' > "$TOKENS_FILE")
+test -n "$VAULT_ADDR" || (>&2 echo "Missing VAULT_ADDR env var"; exit 1)
+
+case "$1" in
+get)
+	jq -r ".\"${VAULT_ADDR}\"" "$TOKENS_FILE"
+	;;
+store)
+	TOKEN=$(cat)
+	TMP=$(mktemp)
+	jq ". + {\"${VAULT_ADDR}\": \"${TOKEN}\"}" "$TOKENS_FILE" \
+		> "$TMP"
+	mv "$TMP" "$TOKENS_FILE"
+	;;
+erase)
+	TMP=$(mktemp)
+	jq "del(.\"${VAULT_ADDR}\")" "$TOKENS_FILE" \
+		> "$TMP"
+	mv "$TMP" "$TOKENS_FILE"
+	;;
+*)
+	>&2 echo "Usage: https://www.vaultproject.io/docs/commands/token-helper"
+	;;
+esac
