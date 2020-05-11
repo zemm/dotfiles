@@ -11,7 +11,8 @@ test -n "$VAULT_ADDR" || (>&2 echo "Missing VAULT_ADDR env var"; exit 1)
 
 case "$1" in
 get)
-	jq -r ".\"${VAULT_ADDR}\"" "$TOKENS_FILE"
+	jq -r ".\"${VAULT_ADDR}\"" "$TOKENS_FILE" \
+		| tr -d '\n'
 	;;
 store)
 	TOKEN=$(cat)
