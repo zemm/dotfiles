@@ -28,5 +28,6 @@ erase)
 	;;
 *)
 	>&2 echo "Usage: https://www.vaultproject.io/docs/commands/token-helper"
+	exit 2
 	;;
 esac
